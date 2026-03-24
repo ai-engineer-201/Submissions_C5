@@ -1,4 +1,3 @@
-Submit your assignments here.
 from transformers import pipeline
 import gradio as gr
 
