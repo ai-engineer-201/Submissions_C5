@@ -1,0 +1,6 @@
+# Virtual environments
+venv/
+env/
+.gradio-venv/
+ENV/
+*.gradio*
