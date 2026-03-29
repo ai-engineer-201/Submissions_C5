@@ -26,8 +26,12 @@ import lancedb
 import subprocess
 import requests
 import time
+# Async support for notebooks
+import nest_asyncio
+
 from pathlib import Path
 from datasets import load_dataset
+from dotenv import load_dotenv
 
 # LlamaIndex core components
 from llama_index.core import SimpleDirectoryReader, VectorStoreIndex, Document
@@ -42,8 +46,8 @@ from llama_index.vector_stores.lancedb import LanceDBVectorStore
 from llama_index.llms.huggingface_api import HuggingFaceInferenceAPI
 from llama_index.llms.ollama import Ollama
 
-# Async support for notebooks
-import nest_asyncio
+
+load_dotenv()  # Load environment variables from .env file
 nest_asyncio.apply()
 
 print("All libraries imported successfully")
@@ -237,9 +241,10 @@ async def test_huggingface_rag():
     
     try:
         # Initialize HuggingFace LLM with authentication
+        apiKey = os.getenv("HUGGINGFACE_API_KEY")
         llm = HuggingFaceInferenceAPI(
             model_name="HuggingFaceH4/zephyr-7b-beta",
-            token=os.environ.get("HUGGINGFACE_API_KEY")
+            token=apiKey,
         )
         
         # Create query engine
@@ -267,7 +272,7 @@ async def test_huggingface_rag():
         print("Make sure to set your HuggingFace API token above")
 
 # Uncomment the line below after setting your API token
-# await test_huggingface_rag()
+asyncio.run(test_huggingface_rag())
 ## 8. Option 3: RAG with Local LLM (Ollama)
 
 #This approach uses a completely local LLM setup. No internet required after initial setup.
